@@ -13,6 +13,7 @@ import Link from "next/link";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import style from '@/styles/Nav.module.css'
+import { useSelector } from 'react-redux'
 
 import MenuItem from '@mui/material/MenuItem';
 import { createSvgIcon } from '@mui/material/utils';
@@ -23,8 +24,8 @@ const HomeIcon = createSvgIcon(
 );
 
 const pages = ['카운터', '계산기', 'BMI', '게시판'];
-const preSettings = ['회원가입', '로그인'];
-const postSettings = ['프로필', '정보수정', '로그아웃', '회원탈퇴'];
+const preSettings = ['회원가입', '로그인', '프로필'];
+const postSettings = [ '정보수정', '로그아웃', '회원탈퇴'];
 
 export function Nav(){
   const [userUrls, setUserUrls] = useState([])
@@ -43,12 +44,20 @@ export function Nav(){
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  const loginUser = useSelector(state => {
+    state.login.loginUser
+  })
+  const isLoggined = useSelector(state => {
+    state.login.isLoggined
+  })
 
   const handleCloseUserMenu = (value) => {
     switch(value) {
-      case '회원가입':  window.location.href='/user/join' 
+      case '회원가입':  window.location.href='/auth/Register' 
                       break;
-      case '로그인':  window.location.href='/user/login' 
+      case '로그인':  window.location.href='/auth/Login' 
+                      break;
+      case '프로필': window.location.href='user/Profile'
                       break;
       default: window.location.href='/'
                       break;
@@ -56,12 +65,9 @@ export function Nav(){
     setAnchorElUser(null);
   };
 
-  
-
   useEffect(() => {
-    const loginUser = localStorage.getItem("loginUser")
-    if (loginUser === null) {
-      setUserUrls(["/user/join","/user/login"])
+    if (! isLoggined) {
+      setUserUrls(["/auth/Register","/auth/Login"])
       setUserSubTitle(["회원가입","로그인"])
     } else {
       setUserUrls(["/user/logout","/user/userProfile","/user/userModify","/user/userRemove","user/userList"])
@@ -71,8 +77,6 @@ export function Nav(){
 
   const basicUrls = ["/basic/counter","/basic/calc","/basic/bmi"]
   const basicSubTitle = ["카운터","계산기","BMI", "게시판"]
-  // const userUrls = ["/user/join","/user/login","/user/logout","/user/profile","/user/updUser","/user/withdrawUser","user/getUsers"]
-  // const userSubTitle = ["회원가입","로그인","로그아웃","프로필","회원수정","회원탈퇴","회원목록"]
   const todoUrls = ["/todo/addTodo","/todo/getTodos","/todo/modifyTodo","/todo/removeTodo"]
   const todoSubTitle = ["할일등록","할일목록","할일수정","할일삭제"]
   const gameUrls = ["/game/addGame","/game/getGames","/game/modifyGame","/game/removeGame"]
@@ -81,6 +85,7 @@ export function Nav(){
   const teamSubTitle = ["팀등록","팀목록","팀수정","팀삭제"]
   const boardUrls = ["/board/writeArticle","/board/getArticles","/board/modifyArticle","/board/removeArticle"]
   const boardSubTitle = ["글등록","글목록","글수정","글삭제"]
+
   const handleClick = (value) => { 
     switch(value) {
       case '카운터':  window.location.href='/basic/counter' 
@@ -98,16 +103,19 @@ export function Nav(){
   const handleAuth = (value) => {
     alert('handleAuth '+value)
     switch(value) {
-      case '회원가입':  window.location.href='/user/join' 
+      case '회원가입':  window.location.href='/auth/register' 
                       break;
-      case '로그인':  window.location.href='/user/login' 
+      case '로그인':  window.location.href='/auth/login' 
+                      break;
+      case '프로필': window.location.href = '/user/profile'
                       break;
       default: window.location.href='/'
                       break;
     }
   }
+
   return (
-    <AppBar position="static" style={{marginBottom:"70px"}}>
+    <AppBar position="static" style={{marginBottom:"20px"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

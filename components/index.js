@@ -6,4 +6,7 @@ export * from "./Nav"
 export * from "./Pagenation"
 export * from "./Table"
 export * from "./basic/Counter"
+export * from "./auth/Login"
+export * from "./auth/Register"
+export * from "./user/Profile"
 

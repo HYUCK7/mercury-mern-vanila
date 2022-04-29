@@ -14,11 +14,5 @@ const CounterPage = ({ number, increaseAsync, decreaseAsync }) => {
 };
 
 export default connect(
-  state => ({
-    number: state.counter
-  }),
-  {
-    increaseAsync,
-    decreaseAsync
-  }
-)(CounterPage);
+  state => ({ number: state.counter }),
+  { increaseAsync, decreaseAsync } )(CounterPage);
